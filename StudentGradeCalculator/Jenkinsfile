@@ -12,22 +12,24 @@ pipeline {
 
         stage('Configure') {
             steps {
-                echo 'Configuring CMake project...'
-                sh '''
-                    mkdir -p build
-                    cd build
-                    cmake ..
-                '''
+                dir('StudentGradeCalculator') {
+                    sh '''
+                        mkdir -p build
+                        cd build
+                        cmake ..
+                    '''
+                }
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                sh '''
-                    cd build
-                    cmake --build .
-                '''
+                dir('StudentGradeCalculator') {
+                    sh '''
+                        cd build
+                        cmake --build .
+                    '''
+                }
             }
         }
 
@@ -36,24 +38,21 @@ pipeline {
 
                 stage('Test') {
                     steps {
-                        echo 'Running basic validation...'
-                        sh '''
-                            if [ -f build/StudentGradeCalculator ]; then
-                                echo "Executable found."
-                            else
-                                echo "Executable not found!"
-                                exit 1
-                            fi
-                        '''
+                        dir('StudentGradeCalculator') {
+                            sh '''
+                                test -f build/StudentGradeCalculator
+                            '''
+                        }
                     }
                 }
 
                 stage('Run') {
                     steps {
-                        echo 'Executing Student Grade Calculator...'
-                        sh '''
-                            echo -e "John\n90\n85\n80" | ./build/StudentGradeCalculator
-                        '''
+                        dir('StudentGradeCalculator') {
+                            sh '''
+                                echo -e "John\n90\n85\n80" | ./build/StudentGradeCalculator
+                            '''
+                        }
                     }
                 }
             }
