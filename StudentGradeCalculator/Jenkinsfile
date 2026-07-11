@@ -1,0 +1,77 @@
+pipeline {
+    agent { label 'linux-agent' }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Configure') {
+            steps {
+                echo 'Configuring CMake project...'
+                sh '''
+                    mkdir -p build
+                    cd build
+                    cmake ..
+                '''
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+                sh '''
+                    cd build
+                    cmake --build .
+                '''
+            }
+        }
+
+        stage('Test & Run') {
+            parallel {
+
+                stage('Test') {
+                    steps {
+                        echo 'Running basic validation...'
+                        sh '''
+                            if [ -f build/StudentGradeCalculator ]; then
+                                echo "Executable found."
+                            else
+                                echo "Executable not found!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Run') {
+                    steps {
+                        echo 'Executing Student Grade Calculator...'
+                        sh '''
+                            echo -e "John\n90\n85\n80" | ./build/StudentGradeCalculator
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'Build completed successfully!'
+        }
+
+        failure {
+            echo 'Build failed.'
+        }
+
+        always {
+            echo 'Pipeline execution finished.'
+        }
+    }
+}
