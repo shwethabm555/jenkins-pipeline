@@ -1,0 +1,30 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: 
+      - self-hosted
+      - Linux
+
+    steps:
+    
+       - uses: actions/checkout@v4
+
+      - name: Verify Runner
+        run: 
+          hostname
+          whoami
+          pwd
+
+              
+        
+      - name: Build
+        run: echo "Building application..."
