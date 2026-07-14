@@ -17,13 +17,13 @@ jobs:
     
        - uses: actions/checkout@v4
 
-      - name: Verify Runner
-        run: 
+       - name: Verify Runner
+         run: 
           hostname
           whoami
           pwd
 
               
         
-      - name: Build
-        run: echo "Building application..."
+       - name: Build
+         run: echo "Building application..."
