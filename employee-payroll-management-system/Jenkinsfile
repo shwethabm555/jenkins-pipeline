@@ -14,15 +14,24 @@ pipeline {
 
         stage('Setup Python') {
             steps {
-                sh 'python3 --version'
-                sh 'pip3 --version'
+                sh '''
+                echo "PATH=$PATH"
+                which python3 || true
+                which pip3 || true
+                python3 --version
+                python3 -m pip --version
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip3 install -r requirements.txt'
+                dir('employee-payroll-management-system') {
+                    sh '''
+                    python3 -m pip install --upgrade pip
+                    python3 -m pip install -r requirements.txt
+                    '''
+                }
             }
         }
 
