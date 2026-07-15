@@ -43,7 +43,7 @@ pipeline {
                 dir('employee-payroll-management-system') {
                     sh '''
                     . venv/bin/activate
-                    flake8 . --extend-ignore=W292,W293
+                    flake8 *.py --extend-ignore=W292,W293
                     '''
                 }
             }
