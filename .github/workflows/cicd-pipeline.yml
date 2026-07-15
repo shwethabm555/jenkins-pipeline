@@ -4,26 +4,35 @@ on:
   push:
     branches:
       - main
-  
-    
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: 
+    runs-on:
       - self-hosted
       - Linux
 
     steps:
-    
-       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-       - name: Verify Runner
-         run: |
+      - name: Verify Runner
+        run: |
           hostname
           whoami
           pwd
 
-              
-        
-       - name: Build
-         run: echo "Building application...."
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Application
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal
