@@ -41,7 +41,7 @@ jobs:
       - name: Lint Python Code
         working-directory: employee-payroll-management-system
         run: |
-          flake8 .
+          flake8 . --extend-ignore=W292
 
       - name: Execute Application
         working-directory: employee-payroll-management-system

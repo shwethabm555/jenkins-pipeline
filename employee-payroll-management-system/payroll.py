@@ -27,3 +27,4 @@ def calculate_salary(basic_salary):
         "Tax": tax,
         "Net Salary": net_salary
     }
+    
