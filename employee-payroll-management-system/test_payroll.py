@@ -21,4 +21,3 @@ def test_zero_salary():
 def test_negative_salary():
     with pytest.raises(ValueError):
         calculate_salary(-1000)
-        
